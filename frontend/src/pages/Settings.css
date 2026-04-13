@@ -1,0 +1,73 @@
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 800px;
+}
+
+.settings-card {
+  padding: 2rem;
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+}
+
+.settings-card-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.description {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+.invite-result {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.code-box {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.code {
+  font-family: monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--accent-primary);
+  background: var(--bg-primary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--accent-hover);
+}
+
+.icon-btn {
+  padding: 0.5rem;
+}
+
+.warning-text {
+  color: var(--warning);
+  font-size: 0.75rem;
+}
+
+.error-panel {
+  padding: 3rem;
+  text-align: center;
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
