@@ -19,7 +19,7 @@ const Dashboard = () => {
         
         setStats({
           totalTasks: tasks.length,
-          completedTasks: tasks.filter(t => t.status === 'COMPLETED').length
+          completedTasks: tasks.filter(t => t.status === 'completed').length
         });
       } catch (err) {
         console.error('Failed to fetch dashboard data', err);

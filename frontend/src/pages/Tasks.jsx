@@ -40,7 +40,7 @@ const Tasks = () => {
   };
 
   const toggleStatus = async (task) => {
-    const nextStatus = task.status === 'COMPLETED' ? 'PENDING' : 'COMPLETED';
+    const nextStatus = task.status === 'completed' ? 'pending' : 'completed';
     try {
       await axios.patch(`http://localhost:5000/api/tasks/${task.id}/status`, { status: nextStatus });
       fetchTasks(page);
@@ -78,12 +78,12 @@ const Tasks = () => {
         ) : (
           <ul className="tasks">
             {tasks.map(task => (
-              <li key={task.id} className={`task-item ${task.status === 'COMPLETED' ? 'completed' : ''}`}>
+              <li key={task.id} className={`task-item ${task.status === 'completed' ? 'completed' : ''}`}>
                 <div 
-                  className={`task-checkbox ${task.status === 'COMPLETED' ? 'checked' : ''}`}
+                  className={`task-checkbox ${task.status === 'completed' ? 'checked' : ''}`}
                   onClick={() => toggleStatus(task)}
                 >
-                  {task.status === 'COMPLETED' && <Check size={14} color="white" />}
+                  {task.status === 'completed' && <Check size={14} color="white" />}
                 </div>
                 <div className="task-content">
                   <p className="task-title">{task.title}</p>

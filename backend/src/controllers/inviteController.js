@@ -49,7 +49,7 @@ const joinWithInvite = async (req, res) => {
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
     const userResult = await db.query(
-      "INSERT INTO users (email, password, role, tenant_id) VALUES ($1, $2, 'USER', $3) RETURNING *",
+      "INSERT INTO users (email, password, role, tenant_id) VALUES ($1, $2, 'MEMBER', $3) RETURNING *",
       [email, passwordHash, invite.tenant_id]
     );
     const user = userResult.rows[0];
