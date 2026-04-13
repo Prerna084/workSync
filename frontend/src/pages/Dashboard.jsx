@@ -12,14 +12,11 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // Ideally we might have a specific /api/dashboard endpoint, 
-        // but for now we derive stats from /api/tasks
-        const tasksRes = await axios.get('http://localhost:5000/api/tasks?limit=100');
-        const tasks = tasksRes.data;
+        const statsRes = await axios.get('http://localhost:5000/api/tasks/stats');
         
         setStats({
-          totalTasks: tasks.length,
-          completedTasks: tasks.filter(t => t.status === 'completed').length
+          totalTasks: statsRes.data.total,
+          completedTasks: statsRes.data.completed
         });
       } catch (err) {
         console.error('Failed to fetch dashboard data', err);

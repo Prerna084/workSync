@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Plus, ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import './Tasks.css';
 
 const Tasks = () => {
+  const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [loading, setLoading] = useState(true);
@@ -55,20 +57,22 @@ const Tasks = () => {
         <h1 className="page-title">Task Manager</h1>
       </div>
 
-      <div className="task-creation glass-panel">
-        <form onSubmit={handleCreateTask} className="task-form">
-          <input 
-            type="text" 
-            className="input-field" 
-            placeholder="What needs to be done?" 
-            value={newTaskTitle}
-            onChange={(e) => setNewTaskTitle(e.target.value)}
-          />
-          <button type="submit" className="btn btn-primary">
-            <Plus size={18} /> Add Task
-          </button>
-        </form>
-      </div>
+      {user?.role === 'ADMIN' && (
+        <div className="task-creation glass-panel">
+          <form onSubmit={handleCreateTask} className="task-form">
+            <input 
+              type="text" 
+              className="input-field" 
+              placeholder="What needs to be done?" 
+              value={newTaskTitle}
+              onChange={(e) => setNewTaskTitle(e.target.value)}
+            />
+            <button type="submit" className="btn btn-primary">
+              <Plus size={18} /> Add Task
+            </button>
+          </form>
+        </div>
+      )}
 
       <div className="task-list glass-panel">
         {loading ? (

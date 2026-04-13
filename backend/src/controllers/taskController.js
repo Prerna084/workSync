@@ -71,4 +71,31 @@ const updateTaskStatus = async (req, res) => {
   }
 };
 
-module.exports = { createTask, getTasks, updateTaskStatus };
+const getTaskStats = async (req, res) => {
+  const tenantId = req.user.tenant_id;
+
+  try {
+    const result = await db.query(
+      "SELECT status, COUNT(*) FROM tasks WHERE tenant_id = $1 GROUP BY status",
+      [tenantId]
+    );
+
+    let total = 0;
+    let completed = 0;
+    let pending = 0;
+
+    result.rows.forEach(row => {
+      const count = parseInt(row.count, 10);
+      total += count;
+      if (row.status === 'completed') completed += count;
+      if (row.status === 'pending') pending += count;
+    });
+
+    res.json({ total, completed, pending });
+  } catch (err) {
+    console.error("Get Task Stats Error:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { createTask, getTasks, updateTaskStatus, getTaskStats };

@@ -1,8 +1,10 @@
-const checkAdmin = (req, res, next) => {
-  if (req.user.role !== "ADMIN") {
-    return res.status(403).json({ message: "Admins only" });
-  }
-  next();
+const roleMiddleware = (roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+    next();
+  };
 };
 
-module.exports = checkAdmin;
+module.exports = roleMiddleware;
