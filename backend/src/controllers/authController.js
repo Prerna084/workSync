@@ -9,36 +9,49 @@ const register = async (req, res) => {
   }
 
   try {
-    // 1. Create Organization
-    const orgResult = await db.query(
-      "INSERT INTO organizations (name) VALUES ($1) RETURNING *",
-      [orgName]
-    );
-    const org = orgResult.rows[0];
+    const client = await db.connect();
+    
+    try {
+      await client.query("BEGIN");
+      
+      // 1. Create Organization
+      const orgResult = await client.query(
+        "INSERT INTO organizations (name) VALUES ($1) RETURNING *",
+        [orgName]
+      );
+      const org = orgResult.rows[0];
 
-    // 2. Create Admin User for the Organization
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+      // 2. Create Admin User for the Organization
+      const saltRounds = 10;
+      const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    const userResult = await db.query(
-      "INSERT INTO users (email, password, role, tenant_id) VALUES ($1, $2, $3, $4) RETURNING *",
-      [email, passwordHash, 'ADMIN', org.id]
-    );
-    const user = userResult.rows[0];
+      const userResult = await client.query(
+        "INSERT INTO users (email, password, role, tenant_id) VALUES ($1, $2, $3, $4) RETURNING *",
+        [email, passwordHash, 'ADMIN', org.id]
+      );
+      const user = userResult.rows[0];
 
-    // 3. Generate Token
-    const token = jwt.sign(
-      { userId: user.id, tenant_id: user.tenant_id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
+      await client.query("COMMIT");
 
-    res.status(201).json({
-      message: "Organization and Admin created successfully.",
-      user: { id: user.id, email: user.email, role: user.role, tenant_id: user.tenant_id },
-      org: { id: org.id, name: org.name },
-      token
-    });
+      // 3. Generate Token
+      const token = jwt.sign(
+        { userId: user.id, tenant_id: user.tenant_id, role: user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' }
+      );
+
+      res.status(201).json({
+        message: "Organization and Admin created successfully.",
+        user: { id: user.id, email: user.email, role: user.role, tenant_id: user.tenant_id },
+        org: { id: org.id, name: org.name },
+        token
+      });
+    } catch (err) {
+      await client.query("ROLLBACK");
+      throw err;
+    } finally {
+      client.release();
+    }
   } catch (err) {
     console.error("Register Error:", err);
     if (err.code === '23505') { // Unique violation PG error string code
