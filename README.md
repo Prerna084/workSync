@@ -59,6 +59,7 @@ Security isn't just an afterthought—it's implemented at every layer:
 1. **Frontend:** UI components dynamically render based on user roles (Admin vs Member).
 2. **Gateway:** Protected routes ensure unauthenticated requests are dropped immediately.
 3. **Database Level:** Hardened backend validation guarantees that even if a malicious user bypasses the client, they cannot access unauthorized tenant data.
+4. **Data Consistency:** Core mutations (like organization onboarding and user invitations) are wrapped in bulletproof **ACID PostgreSQL Transactions**, completely preventing partial updates and race conditions.
 
 ---
 
