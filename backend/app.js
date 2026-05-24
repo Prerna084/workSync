@@ -9,7 +9,11 @@ const setupSwagger = require('./src/config/swagger');
 const app = express();
 
 app.use(cors({
-  origin: true,
+  origin: [
+    "http://localhost:5173",
+    "https://worksync-frontend-7uj1.onrender.com"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true
 }));
 app.use(express.json());
