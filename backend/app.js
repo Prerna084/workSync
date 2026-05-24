@@ -24,8 +24,7 @@ app.use(cors({
   credentials: true
 }));
 
-// Enable pre-flight requests for all endpoints (Express 5 compatible)
-app.options('(.*)', cors());
+
 
 app.use(express.json());
 
