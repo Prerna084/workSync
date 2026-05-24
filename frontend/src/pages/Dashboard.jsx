@@ -12,7 +12,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const statsRes = await axios.get('http://localhost:5000/api/tasks/stats');
+        const statsRes = await axios.get('/api/tasks/stats');
         
         setStats({
           totalTasks: statsRes.data.total,

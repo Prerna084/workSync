@@ -24,7 +24,7 @@ const Settings = () => {
   const handleGenerateInvite = async () => {
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:5000/api/invites/generate');
+      const res = await axios.post('/api/invites/generate');
       setInviteCode(res.data.code);
     } catch (err) {
       console.error('Failed to generate invite', err);

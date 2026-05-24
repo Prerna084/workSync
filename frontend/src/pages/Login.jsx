@@ -19,7 +19,7 @@ const Login = () => {
     
     try {
       let response;
-      const apiBase = 'http://localhost:5000/api';
+      const apiBase = '/api';
       
       if (isRegister) {
         if (formData.role === 'INVITE') {

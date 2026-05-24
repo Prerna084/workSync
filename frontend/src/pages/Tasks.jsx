@@ -15,7 +15,7 @@ const Tasks = () => {
   const fetchTasks = async (currentPage) => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://localhost:5000/api/tasks?limit=${limit}&offset=${currentPage * limit}`);
+      const res = await axios.get(`/api/tasks?limit=${limit}&offset=${currentPage * limit}`);
       setTasks(res.data);
     } catch (err) {
       console.error('Fetch tasks error', err);
@@ -33,7 +33,7 @@ const Tasks = () => {
     if (!newTaskTitle.trim()) return;
 
     try {
-      await axios.post('http://localhost:5000/api/tasks', { title: newTaskTitle });
+      await axios.post('/api/tasks', { title: newTaskTitle });
       setNewTaskTitle('');
       fetchTasks(page); // Refresh list
     } catch (err) {
@@ -44,7 +44,7 @@ const Tasks = () => {
   const toggleStatus = async (task) => {
     const nextStatus = task.status === 'completed' ? 'pending' : 'completed';
     try {
-      await axios.patch(`http://localhost:5000/api/tasks/${task.id}/status`, { status: nextStatus });
+      await axios.patch(`/api/tasks/${task.id}/status`, { status: nextStatus });
       fetchTasks(page);
     } catch (err) {
       console.error('Update status error', err);
