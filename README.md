@@ -1,84 +1,175 @@
+# WorkSync
 
+WorkSync is a multi-tenant workflow and task management platform built for teams and organizations to collaborate securely within isolated workspaces.
 
-## ✨ The Vision
+The project focuses on solving practical backend engineering problems like:
 
-Most personal projects stick to basic CRUD operations. I built WorkSync to solve real-world engineering challenges: **multi-tenancy, scalable architecture, and robust security**. 
+* tenant isolation
+* role-based access control
+* secure authentication
+* scalable backend architecture
+* efficient task management
 
-WorkSync functions like the engines behind enterprise applications (think Slack or Notion)—allowing multiple independent organizations to work securely on a shared backend infrastructure without data overlap.
-
----
-
-## 🧠 Core Engineering Concepts
-
-### 🏢 Multi-Tenant Architecture
-Each organization (tenant) operates in a strictly isolated environment within a shared database architecture.
-- Every record is securely bound via a `tenant_id`.
-- Ensures zero data leakage between different companies on the platform.
-
-### 🔐 Secure Auth & RBAC (Role-Based Access Control)
-- **JWT-based authentication** for secure, stateless sessions.
-- **Bcrypt password hashing** to protect user credentials.
-- **Strict Role Hierarchies:**
-  - `ADMIN`: Full organizational control (invite users, manage workflows).
-  - `MEMBER`: Focused access (view/update assigned tasks).
-
-### ⚙️ Scalable Backend & Data Management
-- **Task Management System:** Tenant-aware querying ensures users strictly see only their organization's data. Implemented pagination to handle massive data sets efficiently.
-- **Analytics Dashboard:** Uses optimized SQL aggregations on the backend to deliver real-time metrics (Total/Completed/Pending tasks) without choking the UI.
-- **Activity Logging:** Comprehensive audit trails tracking user actions, simulating compliance standards used in enterprise applications.
-
-### 🤝 Seamless Onboarding (Invite System)
-- Admins can generate secure, time-boxed invite codes.
-- New users are seamlessly grouped into the correct organization and automatically provisioned with the right roles.
+The idea behind WorkSync was to move beyond simple CRUD applications and build something closer to how real SaaS collaboration platforms work.
 
 ---
 
-## 🏗️ Architecture Stack
+# Features
 
-This project strictly follows a layered architecture pattern:
+## Multi-Tenant Architecture
 
-```text
-Frontend (React + Tailwind)
-       ⬇️ (REST API)
-Backend (Node.js + Express)
-       ⬇️ (Optimized SQL)
-Database (PostgreSQL)
-```
+Each organization works inside its own isolated workspace while sharing the same backend infrastructure.
 
-**Backend Design Pattern:**
-- **Controllers** → Handle HTTP requests and responses.
-- **Services** → Core business logic (keeps controllers lean).
-- **Middleware** → Intercepts requests for Authentication, Authorization, and Tenant Validation.
-- **Routes** → Maps endpoints to controllers.
+* Every record is associated with a `tenant_id`
+* Users can only access data belonging to their organization
+* Prevents cross-organization data access
 
 ---
 
-## 🔒 Defense-in-Depth Security
+## Authentication & Authorization
 
-Security isn't just an afterthought—it's implemented at every layer:
-1. **Frontend:** UI components dynamically render based on user roles (Admin vs Member).
-2. **Gateway:** Protected routes ensure unauthenticated requests are dropped immediately.
-3. **Database Level:** Hardened backend validation guarantees that even if a malicious user bypasses the client, they cannot access unauthorized tenant data.
-4. **Data Consistency:** Core mutations (like organization onboarding and user invitations) are wrapped in bulletproof **ACID PostgreSQL Transactions**, completely preventing partial updates and race conditions.
+* JWT-based authentication
+* Password hashing using bcrypt
+* Role-Based Access Control (RBAC)
+
+### Roles
+
+### ADMIN
+
+* Manage organization
+* Invite team members
+* Create and manage tasks
+
+### MEMBER
+
+* View assigned tasks
+* Update task progress
 
 ---
 
-## 🚀 Getting Started
+## Task Management
 
-Want to run WorkSync locally? Follow these steps:
+* Create and manage tasks
+* Update task status
+* Pagination support for large datasets
+* Tenant-aware task queries
+* Organization-specific task visibility
 
-### 1. Clone the Repository
+---
+
+## Dashboard & Analytics
+
+The dashboard provides organization-level insights such as:
+
+* Total Tasks
+* Completed Tasks
+* Pending Tasks
+
+Analytics are generated using optimized SQL queries on the backend.
+
+---
+
+## Invite-Based Team Onboarding
+
+Admins can generate invite codes for new members.
+
+Features:
+
+* Secure invite flow
+* Automatic organization mapping
+* Role provisioning during onboarding
+* Expiring invite codes
+
+---
+
+## Data Consistency
+
+PostgreSQL transactions are used for workflows like organization creation and invite-based onboarding to ensure related database operations are completed safely and consistently.
+
+---
+
+# Tech Stack
+
+## Frontend
+
+* React.js
+* Tailwind CSS
+
+## Backend
+
+* Node.js
+* Express.js
+
+## Database
+
+* PostgreSQL
+
+## Authentication
+
+* JWT
+* bcrypt
+
+---
+
+# Backend Architecture
+
+The backend follows a layered architecture pattern:
+
+* **Controllers** → Handle request/response logic
+* **Services** → Business logic layer
+* **Middleware** → Authentication, authorization, and tenant validation
+* **Routes** → API endpoint management
+
+---
+
+# Security Features
+
+Security is implemented across multiple layers:
+
+* Protected routes using JWT authentication
+* Role-based frontend rendering
+* Tenant validation on backend queries
+* Secure password hashing using bcrypt
+* Backend validation to prevent unauthorized data access
+
+---
+
+# Screenshots
+
+All project screenshots are available inside the `/screenshots` folder.
+
+Included Screenshots:
+
+
+* Authentication & Organization Setup(![alt text](<workSync_ss/workSync_ss/Screenshot 2026-05-24 195723.png>))
+* Admin Dashboard(![alt text](<workSync_ss/workSync_ss/Screenshot 2026-05-24 200051.png>))
+* Task Management(![alt text](<workSync_ss/workSync_ss/Screenshot 2026-05-24 200258.png>))
+* Invite System(![alt text](<workSync_ss/workSync_ss/Screenshot 2026-05-24 200341.png>))
+* Member Dashboard(![alt text](<workSync_ss/workSync_ss/Screenshot 2026-05-24 200454.png>))
+* Role-Based Access Views
+
+---
+
+# Getting Started
+
+## 1. Clone the Repository
+
 ```bash
 git clone https://github.com/your-username/worksync.git
 cd worksync
 ```
 
-### 2. Configure the Backend
+---
+
+## 2. Backend Setup
+
 ```bash
 cd backend
-npx nodemon server.js
+npm install
 ```
-Create a `.env` file in the `/backend` directory:
+
+Create a `.env` file inside the `/backend` directory:
+
 ```env
 PORT=5000
 DB_USER=postgres
@@ -86,56 +177,69 @@ DB_HOST=localhost
 DB_NAME=worksync_db
 DB_PASSWORD=yourpassword
 DB_PORT=5432
-JWT_SECRET=your_super_secret_key
+JWT_SECRET=your_secret_key
 ```
-Start the development server:
+
+Start the backend server:
+
 ```bash
 npm run dev
 ```
 
-### 3. Configure the Database
-- Create a PostgreSQL database named `worksync_db`.
-- Run your initialization scripts to set up the schemas (`organizations`, `users`, `tasks`, `logs`).
+---
 
-### 4. Boot up the Frontend
+## 3. Database Setup
+
+Create a PostgreSQL database named:
+
+```bash
+worksync_db
+```
+
+Run your SQL initialization scripts to create:
+
+* organizations
+* users
+* tasks
+* logs
+
+---
+
+## 4. Frontend Setup
+
 ```bash
 cd frontend
 npm install
-npm run start
+npm start
 ```
 
 ---
 
-## 🐳 Docker Deployment (Optional)
+# API Documentation
 
-If you prefer containerized environments, you can spin up the backend via Docker:
+Swagger documentation is available at:
+
 ```bash
-docker build -t worksync-backend .
-docker run -p 5000:5000 worksync-backend
+http://localhost:5000/api-docs
 ```
 
 ---
 
-## 📘 API Documentation
+# Learnings
 
-The REST API is fully documented. Once the backend is running, explore the endpoints via Swagger UI:
-👉 `http://localhost:5000/api-docs`
+Building WorkSync helped me understand:
 
----
-
-## 💡 Key Takeaways & Learnings
-
-Building WorkSync was a massive leap from standard full-stack development. It taught me:
-- How to architect robust **Multi-Tenant** systems.
-- The intricacies of securing APIs using **JWT and RBAC middlewares**.
-- Writing and optimizing complex **SQL queries** for dashboard analytics.
-- Structuring a codebase for **maintainability and scalability**.
+* multi-tenant system design
+* RBAC implementation
+* backend architecture patterns
+* secure API development
+* SQL query optimization
+* scalable project structure
 
 ---
 
-## 🎯 What's Next? (Roadmap)
+# Future Improvements
 
-- [ ] **Rate Limiting:** Implement per-tenant API limits to prevent abuse.
-- [ ] **Email Integration:** Switch from code-based invites to email-based Magic Links.
-- [ ] **Real-time Notifications:** Integrate WebSockets for live updates on task changes.
-
+* Rate limiting per tenant
+* Email-based invitation system
+* Real-time notifications using WebSockets
