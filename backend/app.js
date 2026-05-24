@@ -9,17 +9,10 @@ const setupSwagger = require('./src/config/swagger');
 const app = express();
 
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, or server-to-server)
-    if (!origin) return callback(null, true);
-    
-    // Dynamically allow any localhost port or any Render subdomain
-    if (origin.startsWith('http://localhost:') || origin.endsWith('.onrender.com')) {
-      return callback(null, true);
-    }
-    
-    return callback(new Error('Not allowed by CORS'));
-  },
+  origin: [
+    "http://localhost:5173",
+    "https://worksync-frontend-7uj1.onrender.com"
+  ],
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   credentials: true
 }));
